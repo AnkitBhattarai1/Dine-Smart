@@ -1,6 +1,7 @@
 package com.example.user_service.ServiceImpl;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
@@ -10,11 +11,19 @@ import com.example.user_service.Repo.UserRepo;
 import com.example.user_service.Services.UserService;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
+import com.example.user_service.dto.UpdatingUserRequest;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.ws.rs.NotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
+
+    public UserServiceImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     private Function<RequestUser, User> userReqToUser = (userReq) -> {
         User u = new User();
@@ -36,18 +45,44 @@ public class UserServiceImpl implements UserService {
         return u;
     };
 
-    public UserServiceImpl(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
-
     @Override
-    public List<User> getAllUsers() {
-        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+    public List<ResponseUser> getAllUsers() {
+
+        return userRepo.findAll().stream().map((user) -> userToUserRes.apply(user)).toList();
     }
 
     @Override
     public ResponseUser saveUser(RequestUser requestUser) {
         return userToUserRes.apply(userRepo.save(userReqToUser.apply(requestUser)));
+    }
+
+    @Override
+    public ResponseUser getUserByEmail(String emaiL) {
+        User u = userRepo.findByEmail(emaiL)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find the user by this email"));
+        return userToUserRes.apply(u);
+    }
+
+    @Override
+    public ResponseUser getUserById(String Id) {
+        User u = userRepo.findById(Id)
+                .orElseThrow(() -> new EntityNotFoundException("Canoot find the user by this Id"));
+        return userToUserRes.apply(u);
+    }
+
+    @Override
+    public ResponseUser updateUser(UpdatingUserRequest user, String id) {
+        // TODO Must validat the user trying to edit details is the user who is
+        // currently logged in ...
+        User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("User cannot be found "));
+        u.setFirstName(user.firstName() == null ? u.getFirstName() : user.firstName());
+        u.setLastName(user.lastName() == null ? u.getLastName() : user.lastName());
+        u.setAddress((user.address() == null ? u.getAddress() : user.address()));
+        u.setEmail(user.email() == null ? u.getEmail() : user.email());
+        u.setMiddleName(user.middleName() == null ? u.getMiddleName() : user.middleName());
+        u.setPhone(user.phone() == null ? u.getPhone() : user.phone());
+
+        return userToUserRes.apply(userRepo.save(u));
     }
 
 }
