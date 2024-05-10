@@ -1,2 +1,3 @@
 user_service/src/main/resources/application.properties
 service_registry/src/main/resources/application.properties
+resturant_service/src/main/resources/application.properties

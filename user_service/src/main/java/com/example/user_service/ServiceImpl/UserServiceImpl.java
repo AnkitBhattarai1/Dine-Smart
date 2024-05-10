@@ -1,7 +1,6 @@
 package com.example.user_service.ServiceImpl;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseUser updateUser(UpdatingUserRequest user, String id) {
-        // TODO Must validat the user trying to edit details is the user who is
+        // TODO Must validate the user trying to edit details is the user who is
         // currently logged in ...
         User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("User cannot be found "));
         u.setFirstName(user.firstName() == null ? u.getFirstName() : user.firstName());
