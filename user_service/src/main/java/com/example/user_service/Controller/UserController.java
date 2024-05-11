@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.user_service.Services.UserService;
+import com.example.user_service.dto.NonRegisteredRequestUser;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
@@ -56,8 +57,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseUser putMethodName(@PathVariable String id, @RequestBody UpdatingUserRequest user) {
-        // TODO: process PUT request
+    public ResponseUser updateUserDetails(@PathVariable String id, @RequestBody UpdatingUserRequest user) {
         return userService.updateUser(user, id);
     }
+
+    @PostMapping("/unregistered")
+    public ResponseUser saveNonRegisteredUser(@RequestBody NonRegisteredRequestUser user) {
+        // TODO: process POST request
+        return userService.savenonRegisteredUser(user);
+    }
+
 }

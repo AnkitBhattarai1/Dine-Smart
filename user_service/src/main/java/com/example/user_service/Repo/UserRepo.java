@@ -11,4 +11,6 @@ import com.example.user_service.Models.User;
 public interface UserRepo extends JpaRepository<User, String> {
 
     public Optional<User> findByEmail(String email);
+
+    public Optional<User> findByPhone(String phone);
 }

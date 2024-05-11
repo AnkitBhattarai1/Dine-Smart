@@ -1,6 +1,7 @@
 package com.example.user_service.ServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.user_service.Models.User;
 import com.example.user_service.Repo.UserRepo;
 import com.example.user_service.Services.UserService;
+import com.example.user_service.dto.NonRegisteredRequestUser;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
@@ -82,6 +84,24 @@ public class UserServiceImpl implements UserService {
         u.setPhone(user.phone() == null ? u.getPhone() : user.phone());
 
         return userToUserRes.apply(userRepo.save(u));
+    }
+
+    @Override
+    public ResponseUser savenonRegisteredUser(NonRegisteredRequestUser user) {
+        Optional<User> u = userRepo.findByPhone(user.phone());
+
+        if (u.isPresent()) {
+            // TODO To be implement to do what if user has already been used our
+            // application.....
+            return userToUserRes.apply(u.get());
+        }
+
+        User nonregisteredUser = new User();
+        nonregisteredUser.setEmail(user.email());
+        nonregisteredUser.setPhone(user.phone());
+        nonregisteredUser.setRegistered(false);
+
+        return userToUserRes.apply(userRepo.save(nonregisteredUser));
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.user_service.dto.NonRegisteredRequestUser;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
@@ -14,6 +15,8 @@ public interface UserService {
     public List<ResponseUser> getAllUsers();
 
     public ResponseUser saveUser(RequestUser userRequest);
+
+    public ResponseUser savenonRegisteredUser(NonRegisteredRequestUser user);
 
     public ResponseUser getUserByEmail(String emaiL);
 

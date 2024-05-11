@@ -1,3 +1,7 @@
 user_service/src/main/resources/application.properties
 service_registry/src/main/resources/application.properties
 resturant_service/src/main/resources/application.properties
+photostorage_service/src/main/resources/application.properties
+photostorage_service/src/main/resources/META-INF/additional-spring-configuration-metadata.json
+rating_review_service/src/main/resources/application.properties
+menu_service/src/main/resources/application.properties
