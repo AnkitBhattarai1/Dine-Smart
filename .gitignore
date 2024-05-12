@@ -5,3 +5,4 @@ photostorage_service/src/main/resources/application.properties
 photostorage_service/src/main/resources/META-INF/additional-spring-configuration-metadata.json
 rating_review_service/src/main/resources/application.properties
 menu_service/src/main/resources/application.properties
+.vscode/settings.json

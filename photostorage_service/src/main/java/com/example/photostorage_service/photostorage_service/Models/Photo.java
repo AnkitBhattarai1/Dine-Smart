@@ -1,7 +1,5 @@
 package com.example.photostorage_service.photostorage_service.Models;
 
-import java.net.URI;
-
 import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.Column;
@@ -14,11 +12,17 @@ public class Photo {
     @UuidGenerator
     @Column(unique = true, updatable = false)
     private String id;
-
     private String location;
 
     public Photo() {
 
     }
 
+    public String getId() {
+        return this.id;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

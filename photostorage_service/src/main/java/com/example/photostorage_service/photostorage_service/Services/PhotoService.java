@@ -6,5 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface PhotoService {
 
-    public String uploadPhoto(String id, MultipartFile file);
+    // public String uploadUserPhoto(MultipartFile file);
+
+    // public String uploadMenuItemPhoto(MultipartFile file);
+
+    // public String uploadDefaultPhoto(MultipartFile file);
+
+    public String uploadPhoto(MultipartFile file, String photoOf);
+
 }

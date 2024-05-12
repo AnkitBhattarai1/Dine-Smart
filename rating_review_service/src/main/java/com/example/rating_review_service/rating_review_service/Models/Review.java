@@ -8,5 +8,4 @@ public class Review {
     private String review;
     private String userId;
     private String hotelId;
-
 }
