@@ -14,6 +14,11 @@ public record UpdatingUserRequest(String firstName,
         return new Builder(firstName, lastName, password, phone, email);
     }
 
+    public static UpdatingUserRequest from(String firstName, String lastName, String password, String phone,
+            String email) {
+        return Builder(firstName, lastName, password, phone, email).build();
+    }
+
     public static class Builder {
 
         private final String firstName;

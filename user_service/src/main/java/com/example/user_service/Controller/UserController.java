@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseUser getUserById(@RequestParam(name = "id") String userId) {
+    public ResponseUser getUserById(@PathVariable(name = "id") String userId) {
         return userService.getUserById(userId);
     }
 
@@ -66,5 +66,4 @@ public class UserController {
         // TODO: process POST request
         return userService.savenonRegisteredUser(user);
     }
-
 }

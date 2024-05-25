@@ -9,5 +9,4 @@ public class PhotostorageServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PhotostorageServiceApplication.class, args);
 	}
-
 }

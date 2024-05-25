@@ -12,7 +12,12 @@ public class Photo {
     @UuidGenerator
     @Column(unique = true, updatable = false)
     private String id;
+
+    @Column
     private String location;
+
+    @Column
+    private String photoType;
 
     public Photo() {
 
@@ -22,7 +27,25 @@ public class Photo {
         return this.id;
     }
 
+    public String getlocation() {
+        return location;
+    }
+
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public String getPhotoType() {
+        return photoType;
+    }
+
+    public void setPhotoType(String photoType) {
+        this.photoType = photoType;
+    }
+
+    @Override
+    public String toString() {
+        return "Photo [id=" + id + ", location=" + location + ", photoType=" + photoType + "]";
+    }
+
 }

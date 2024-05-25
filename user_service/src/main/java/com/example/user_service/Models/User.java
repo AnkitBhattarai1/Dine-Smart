@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 /**
  * User
  */
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -24,6 +25,7 @@ public class User {
     private String password;
     private String email;
     private String phone;
+
     private String address;
     private boolean isRegistered;
 

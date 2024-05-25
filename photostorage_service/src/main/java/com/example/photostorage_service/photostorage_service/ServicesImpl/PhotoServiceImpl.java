@@ -38,19 +38,15 @@ public class PhotoServiceImpl implements PhotoService {
             this.name = name;
             // System.out.println(location);
         }
-
-        private String getLocation() {
-            return location;
-        }
-
     }
 
     @Transactional
     @Override
-    public String uploadPhoto(MultipartFile file, String photoOf) {
+    public Photo uploadPhoto(MultipartFile file, String photoOf) {
         /*
          * If not specified the photo will be stored in the default photo storage
-         * locatio ... Need think and implement logic which photOf is discarded and how
+         * location
+         * Need think and implement logic which photOf is discarded and how
          * .
          */
 
@@ -60,12 +56,9 @@ public class PhotoServiceImpl implements PhotoService {
             if (type.toString().equalsIgnoreCase(photoOf))
                 t = type;
             System.out.println(photoOf);
-
         }
-
         // System.out.println(t);
-
-        String result;
+        Photo result;
 
         switch (t) {
             case USER -> result = uploadPhoto.apply(t, file);
@@ -79,16 +72,20 @@ public class PhotoServiceImpl implements PhotoService {
     Function<String, String> fileExtension = filename -> Optional.of(filename).filter(name -> name.contains("."))
             .map(name -> "." + name.substring(filename.lastIndexOf(".") + 1)).orElse(".png");
 
-    BiFunction<PhotoType, MultipartFile, String> uploadPhoto = (photoType, image) -> {
+    BiFunction<PhotoType, MultipartFile, Photo> uploadPhoto = (photoType, image) -> {
         Photo p = new Photo();
+        p.setPhotoType(photoType.toString());
+
         Photo savedInstance = photoRepo.save(p);
         /* Path where photo is upload in String */
         String photoStorageLocation = PhotoType.DEFAULT.location;
+
         switch (photoType) {
             case MENUITEMS -> photoStorageLocation = PhotoType.MENUITEMS.location;
             case USER -> photoStorageLocation = PhotoType.USER.location;
             case DEFAULT -> photoStorageLocation = PhotoType.DEFAULT.location;
             default -> throw new IllegalArgumentException();
+
         }
 
         // System.out.println(photoStorageLocation);
@@ -111,60 +108,11 @@ public class PhotoServiceImpl implements PhotoService {
             p.setLocation(uri);
             photoRepo.save(p);
 
-            return uri;
-
+            return p;
         } catch (Exception f) {
 
             throw new AssertionError(f);
         }
-
     };
-
-    // BiFunction<String, MultipartFile, String> uploadUserPhoto = (id, image) -> {
-    // try {
-
-    // Path storageLocation =
-    // Paths.get(constant.getUserPhotoLocation()).toAbsolutePath().normalize();
-
-    // if (!Files.exists(storageLocation))
-    // Files.createDirectories(storageLocation);
-
-    // Files.copy(image.getInputStream(),
-    // storageLocation.resolve(id +
-    // fileExtension.apply(image.getOriginalFilename())));
-
-    // return ServletUriComponentsBuilder.fromCurrentContextPath()
-    // .path("/photo/" + id +
-    // fileExtension.apply(image.getOriginalFilename())).toUriString();
-
-    // } catch (Exception f) {
-
-    // throw new AssertionError(f);
-    // }
-    // };
-
-    // BiFunction<String, MultipartFile, String> uploadMenuItemsPhoto = (id, image)
-    // -> {
-    // try {
-
-    // Path storageLocation =
-    // Paths.get(constant.getMenuItemsPhotosLocation()).toAbsolutePath().normalize();
-
-    // if (!Files.exists(storageLocation))
-
-    // Files.createDirectories(storageLocation);
-
-    // Files.copy(image.getInputStream(),
-    // storageLocation.resolve(id +
-    // fileExtension.apply(image.getOriginalFilename())));
-
-    // return ServletUriComponentsBuilder.fromCurrentContextPath()
-    // .path("/photo/" + id +
-    // fileExtension.apply(image.getOriginalFilename())).toUriString();
-
-    // } catch (Exception e) {
-    // throw new AssertionError(e);
-    // }
-    // };
 
 }

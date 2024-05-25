@@ -22,11 +22,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
 
+    // Constructor injection of userRepo....
     public UserServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
     private Function<RequestUser, User> userReqToUser = (userReq) -> {
+
         User u = new User();
         u.setFirstName(userReq.firstName());
         u.setLastName(userReq.lastName());
@@ -37,19 +39,25 @@ public class UserServiceImpl implements UserService {
         u.setPhone(userReq.phone());
         u.setRegistered(true);
         return u;
+
     };
 
     private Function<User, ResponseUser> userToUserRes = (user) -> {
+
         ResponseUser u = new ResponseUser.ResponseUserBuilder(user.getFirstName(),
-                user.getLastName(), user.getPhone(), user.getEmail()).address(user.getAddress())
-                .middleName(user.getMiddleName()).build();
+                user.getLastName(), user.getPhone(), user.getEmail())
+                .address(user.getAddress())
+                .middleName(user.getMiddleName())
+                .build();
+
         return u;
     };
 
     @Override
     public List<ResponseUser> getAllUsers() {
 
-        return userRepo.findAll().stream().map((user) -> userToUserRes.apply(user)).toList();
+        return userRepo.findAll().stream().map(
+                (user) -> userToUserRes.apply(user)).toList();
     }
 
     @Override
@@ -61,6 +69,7 @@ public class UserServiceImpl implements UserService {
     public ResponseUser getUserByEmail(String emaiL) {
         User u = userRepo.findByEmail(emaiL)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot find the user by this email"));
+
         return userToUserRes.apply(u);
     }
 
@@ -76,6 +85,7 @@ public class UserServiceImpl implements UserService {
         // TODO Must validate the user trying to edit details is the user who is
         // currently logged in ...
         User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("User cannot be found "));
+
         u.setFirstName(user.firstName() == null ? u.getFirstName() : user.firstName());
         u.setLastName(user.lastName() == null ? u.getLastName() : user.lastName());
         u.setAddress((user.address() == null ? u.getAddress() : user.address()));
@@ -88,6 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseUser savenonRegisteredUser(NonRegisteredRequestUser user) {
+
         Optional<User> u = userRepo.findByPhone(user.phone());
 
         if (u.isPresent()) {
