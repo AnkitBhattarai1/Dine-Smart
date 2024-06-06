@@ -16,4 +16,8 @@ public interface PhotoService {
 
     public Photo uploadPhoto(MultipartFile file, String photoOf);
 
+    public byte[] getPhoto(String filename);
+
+    public Photo PhotogetPhotoWithId(String id);
+
 }

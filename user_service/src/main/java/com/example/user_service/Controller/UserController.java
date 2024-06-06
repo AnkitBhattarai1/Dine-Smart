@@ -2,13 +2,15 @@ package com.example.user_service.Controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.user_service.Services.UserService;
 import com.example.user_service.dto.NonRegisteredRequestUser;
+import com.example.user_service.dto.Photo;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
@@ -29,11 +31,13 @@ public class UserController {
      * /user/email gets the user object of the given email address
      */
 
-    @Autowired
+    private final RestTemplate restTemplate;
+
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RestTemplate restTemplate) {
         this.userService = userService;
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/all")
@@ -66,4 +70,23 @@ public class UserController {
         // TODO: process POST request
         return userService.savenonRegisteredUser(user);
     }
+
+    @GetMapping("/path")
+    public String getMethodName(@RequestParam(name = "param") String param) {
+        String url = "http://PHOTOSTORAGE_SERVICE/photo/path";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("param", param);
+        String a = restTemplate.getForObject(builder.toUriString(), String.class, param);
+        return a;
+    }
+
+    @GetMapping("/photo/{id}")
+    public Photo getPhoto(@PathVariable String id) {
+        String url = "http://PHOTOSTORAGE-SERVICE/photo";
+        // String url = "http://localhost:8081/photo";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("id", id);
+
+        return restTemplate.getForObject(builder.toUriString(), Photo.class);
+    }
+
 }

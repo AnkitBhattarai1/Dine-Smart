@@ -27,7 +27,7 @@ public class Menu {
 
     @Column
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "menu_MenuItems", joinColumns = @JoinColumn(name = "menu_id"), inverseJoinColumns = @JoinColumn(name = "menuItem_Id"))
+    @JoinTable(name = "menu_menuitems", joinColumns = @JoinColumn(name = "menu_id"), inverseJoinColumns = @JoinColumn(name = "menuItem_Id"))
     private Set<MenuItem> menuItems = new HashSet<>();
 
     public Menu() {

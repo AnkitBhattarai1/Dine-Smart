@@ -1,5 +1,6 @@
 package com.example.photostorage_service.photostorage_service.ServicesImpl;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +25,9 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Autowired
     private PhotoRepo photoRepo;
+
+    @Autowired
+    Constants constant;
 
     private enum PhotoType {
         MENUITEMS(Constants.getMenuItemsPhotosLocation(), "MENU_ITEMS_PHOTOS_"),
@@ -67,6 +71,19 @@ public class PhotoServiceImpl implements PhotoService {
             default -> throw new IllegalArgumentException("Unexpected value: " + t);
         }
         return result;
+    }
+
+    @Override
+    public byte[] getPhoto(String filename) {
+        String path = constant.getlocation() + filename.substring(0, filename.lastIndexOf("_")) + "/"
+                + filename.substring(filename.lastIndexOf("_") + 1, filename.length());
+        try {
+            return Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new byte[] {};// blank photo
+        }
     }
 
     Function<String, String> fileExtension = filename -> Optional.of(filename).filter(name -> name.contains("."))
@@ -114,5 +131,10 @@ public class PhotoServiceImpl implements PhotoService {
             throw new AssertionError(f);
         }
     };
+
+    @Override
+    public Photo PhotogetPhotoWithId(String id) {
+        return photoRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Photo Not Found"));
+    }
 
 }

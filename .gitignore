@@ -6,3 +6,10 @@ photostorage_service/src/main/resources/META-INF/additional-spring-configuration
 rating_review_service/src/main/resources/application.properties
 menu_service/src/main/resources/application.properties
 .vscode/settings.json
+.vscode/launch.json
+apigateway/src/main/resources/application.properties
+apigateway/src/main/resources/application.yml
+auth_service/src/main/resources/application.properties
+auth_service/src/main/resources/META-INF/additional-spring-configuration-metadata.json
+auth_service/bin/src/main/resources/application.properties
+apigateway/src/main/resources/META-INF/additional-spring-configuration-metadata.json

@@ -9,9 +9,6 @@ import com.example.photostorage_service.photostorage_service.Models.Photo;
 import com.example.photostorage_service.photostorage_service.Services.PhotoService;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,9 +33,6 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 public class PhotoController {
     @Autowired
     PhotoService photoService;
-
-    @Autowired
-    Constants constant;
 
     /**
      * Handles a POST request to save a photo. This endpoint accepts a file and an
@@ -98,9 +92,12 @@ public class PhotoController {
     @GetMapping(path = "/{filename}", produces = { IMAGE_PNG_VALUE,
             IMAGE_JPEG_VALUE })
     public byte[] getPhoto(@PathVariable("filename") String filename) throws IOException {
-        String path = constant.getlocation() + filename.substring(0, filename.lastIndexOf("_")) + "/"
-                + filename.substring(filename.lastIndexOf("_") + 1, filename.length());
-        return Files.readAllBytes(Paths.get(path));
+        return photoService.getPhoto(filename);
+    }
+
+    @GetMapping()
+    public Photo getMethodName(@RequestParam(name = "id") String param) {
+        return photoService.PhotogetPhotoWithId(param);
     }
 
 }

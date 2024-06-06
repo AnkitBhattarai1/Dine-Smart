@@ -2,6 +2,8 @@ package com.example.menu_service.menu_service.Model;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,6 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "menu_items")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuItem {
 
     @Id
@@ -19,7 +22,7 @@ public class MenuItem {
     @Column()
     String name;
 
-    @Column()
+    @Column(length = 500)
     String description;
 
     @Column()
@@ -28,55 +31,19 @@ public class MenuItem {
     @Column()
     boolean general;
 
-    public MenuItem() {
-    }
+    @Column
+    boolean vegetarian;
 
-    public MenuItem(String name, String description, String photoLocation) {
-        this.name = name;
-        this.description = description;
-        this.photoLocation = photoLocation;
-    }
+    @Column
+    double price;
 
-    public String getId() {
-        return id;
-    }
+    @Column()
+    String available;
 
-    public String getName() {
-        return name;
-    }
+    @Column()
+    String category;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPhotoLocation() {
-        return photoLocation;
-    }
-
-    public void setPhotoLocation(String photoLocation) {
-        this.photoLocation = photoLocation;
-    }
-
-    public boolean isGeneral() {
-        return general;
-    }
-
-    public void setGeneral(boolean general) {
-        this.general = general;
-    }
-
-    @Override
-    public String toString() {
-        return "MenuItem [id=" + id + ", name=" + name + ", description=" + description + ", photoLocation="
-                + photoLocation + ", general=" + general + "]";
-    }
+    @Column
+    String ingredients;
 
 }

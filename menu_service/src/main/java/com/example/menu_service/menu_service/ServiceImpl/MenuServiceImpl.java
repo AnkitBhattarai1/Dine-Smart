@@ -30,7 +30,8 @@ public class MenuServiceImpl implements MenuService {
         Set<MenuItemResponse> itemList = new HashSet<>();
         for (MenuItem item : menu.getMenuItems()) {
             itemList.add(
-                    new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.getPhotoLocation()));
+                    new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.isGeneral(),
+                            item.getPhotoLocation()));
         }
         return new MenuResponse(menu.getId(), itemList);
     }

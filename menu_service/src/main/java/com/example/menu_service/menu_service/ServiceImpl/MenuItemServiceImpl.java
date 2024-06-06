@@ -35,7 +35,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     private MenuItemResponse itemToitemres(MenuItem item) {
-        return new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.getPhotoLocation());
+        return new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.isGeneral(),
+                item.getPhotoLocation());
     }
 
     @Override

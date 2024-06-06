@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @param email      the user's email address
  * @param phone      the user's phone number
  * @param address    the user's address (optional)
- * @param response   the user's photo details wrapped in a {@link PhotoResponse}
+ * @param response   the user's photo details wrapped in a {@link Photo}
  *                   object (optional)
  */
 
@@ -25,7 +25,7 @@ public record ResponseUser(String firstName,
         String email,
         String phone,
         String address,
-        PhotoResponse response) {
+        Photo response) {
 
     public ResponseUser {
     }
@@ -45,7 +45,7 @@ public record ResponseUser(String firstName,
         private String middleName;
         private String address;
 
-        private PhotoResponse photoResponse;
+        private Photo photoResponse;
 
         /**
          * Constructs a new builder for a {@link ResponseUser} with required fields.
@@ -87,11 +87,11 @@ public record ResponseUser(String firstName,
         /**
          * Sets the photo response details of the user.
          *
-         * @param response a {@link PhotoResponse} object containing the user's photo
+         * @param response a {@link Photo} object containing the user's photo
          *                 details
          * @return this builder instance for chaining method calls
          */
-        public ResponseUserBuilder photoResponse(PhotoResponse response) {
+        public ResponseUserBuilder photoResponse(Photo response) {
             this.photoResponse = response;
             return this;
         }
