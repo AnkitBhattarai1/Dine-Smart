@@ -6,6 +6,7 @@ import jakarta.persistence.Embeddable;
 public record Location(float latitude, float longitude) {
 
     public Location {
+
         if (latitude < -90 || latitude > 90)
             throw new IllegalArgumentException("Invalid latitude");
 
@@ -16,4 +17,5 @@ public record Location(float latitude, float longitude) {
     public double distanceTo(Location other) {
         return Math.sqrt(latitude * latitude + longitude * longitude);
     }
+
 }

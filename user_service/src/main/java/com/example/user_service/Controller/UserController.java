@@ -10,11 +10,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.user_service.Services.UserService;
 import com.example.user_service.dto.NonRegisteredRequestUser;
-import com.example.user_service.dto.Photo;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,9 +46,21 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping
-    public ResponseUser saveUser(@RequestBody RequestUser user) {
-        return userService.saveUser(user);
+    // @PostMapping("/register")
+    // public ResponseUser saveUser(@RequestBody RequestUser user) {
+
+    // return userService.saveUser(user);
+    // }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> saveUser(@RequestBody RequestUser user) {
+        try {
+            return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
@@ -67,7 +80,6 @@ public class UserController {
 
     @PostMapping("/unregistered")
     public ResponseUser saveNonRegisteredUser(@RequestBody NonRegisteredRequestUser user) {
-        // TODO: process POST request
         return userService.savenonRegisteredUser(user);
     }
 
@@ -81,12 +93,9 @@ public class UserController {
     }
 
     @GetMapping("/photo/{id}")
-    public Photo getPhoto(@PathVariable String id) {
-        String url = "http://PHOTOSTORAGE-SERVICE/photo";
-        // String url = "http://localhost:8081/photo";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("id", id);
+    public ResponseEntity<?> getPhoto(@PathVariable String id) {
 
-        return restTemplate.getForObject(builder.toUriString(), Photo.class);
+        return userService.getUserPHoto(id);
     }
 
 }

@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MenuRepo extends JpaRepository<Menu, String> {
 
     public Optional<Menu> findByResturantId(String resturantId);
+
 }

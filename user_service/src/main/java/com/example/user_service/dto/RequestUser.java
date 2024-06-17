@@ -1,5 +1,7 @@
 package com.example.user_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record RequestUser(String firstName,
         String middleName,
         String lastName,
@@ -13,6 +15,7 @@ public record RequestUser(String firstName,
 
     public static class RequestUserBuilder {
 
+        @JsonProperty("first_name")
         private final String firstName;
         private final String lastName;
         private final String phone;

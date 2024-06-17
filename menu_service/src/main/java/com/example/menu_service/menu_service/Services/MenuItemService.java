@@ -17,4 +17,6 @@ public interface MenuItemService {
 
     public Set<MenuItemResponse> saveItems(Set<MenuItemRequest> requests);
 
+    public Double getPrice(String id);
+
 }

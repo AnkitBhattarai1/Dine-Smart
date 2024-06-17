@@ -5,9 +5,7 @@ import java.util.Set;
 public record MenuRequest(String resturantId, Set<MenuItemRequest> menuItems) {
 
     public MenuRequest {
-
         // TODO Validation is to be done
-
     }
 
 }

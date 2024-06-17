@@ -4,19 +4,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.user_service.Models.AuthUser;
 import com.example.user_service.Models.User;
 import com.example.user_service.Repo.UserRepo;
 import com.example.user_service.Services.UserService;
 import com.example.user_service.dto.NonRegisteredRequestUser;
+import com.example.user_service.dto.Photo;
 import com.example.user_service.dto.RequestUser;
 import com.example.user_service.dto.ResponseUser;
 import com.example.user_service.dto.UpdatingUserRequest;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
+/**
+ * Implementation of the {@link UserService} interface.
+ * This class provides methods to manage user-related operations.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -27,21 +41,24 @@ public class UserServiceImpl implements UserService {
         this.userRepo = userRepo;
     }
 
-    private Function<RequestUser, User> userReqToUser = (userReq) -> {
+    @Autowired
+    RestTemplate restTemplate;
 
+    // Function to map RequestUser to User entity
+    private Function<RequestUser, User> userReqToUser = (userReq) -> {
         User u = new User();
         u.setFirstName(userReq.firstName());
         u.setLastName(userReq.lastName());
         u.setMiddleName(userReq.middleName());
         u.setAddress((userReq.address()));
         u.setEmail(userReq.email());
-        u.setPassword(userReq.password());
+        // u.setPassword(userReq.password());
         u.setPhone(userReq.phone());
         u.setRegistered(true);
         return u;
-
     };
 
+    // Function to map User entity to ResponseUser
     private Function<User, ResponseUser> userToUserRes = (user) -> {
 
         ResponseUser u = new ResponseUser.ResponseUserBuilder(user.getFirstName(),
@@ -53,6 +70,12 @@ public class UserServiceImpl implements UserService {
         return u;
     };
 
+    /**
+     * Retrieves all users and maps them to ResponseUser DTO.
+     *
+     * @return List of ResponseUser DTOs representing all users.
+     */
+
     @Override
     public List<ResponseUser> getAllUsers() {
 
@@ -60,9 +83,33 @@ public class UserServiceImpl implements UserService {
                 (user) -> userToUserRes.apply(user)).toList();
     }
 
+    /**
+     * Saves a new registered user.
+     * Registers the user with the authentication service.
+     *
+     * @param requestUser The RequestUser object containing user details.
+     * @return The saved user as a ResponseUser DTO.
+     * @throws IllegalArgumentException if the user is already registered.
+     * @throws RuntimeException         if user registration fails.
+     */
     @Override
+    @Transactional
     public ResponseUser saveUser(RequestUser requestUser) {
-        return userToUserRes.apply(userRepo.save(userReqToUser.apply(requestUser)));
+
+        if (userRepo.findByEmail(requestUser.email()).isPresent())
+            throw new IllegalArgumentException("User already registered");
+
+        User u = userRepo.save(userReqToUser.apply(requestUser));
+
+        AuthUser authUser = new AuthUser(u.getId(), u.getEmail(), requestUser.password());
+
+        String url = "http://AUTH-SERVICE/auth/register";
+        HttpEntity<AuthUser> request = new HttpEntity<>(authUser);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        if (response.getStatusCode() != HttpStatus.OK)
+            throw new RuntimeException("Could not register the user");
+        return userToUserRes.apply(u);
     }
 
     @Override
@@ -113,6 +160,32 @@ public class UserServiceImpl implements UserService {
         nonregisteredUser.setRegistered(false);
 
         return userToUserRes.apply(userRepo.save(nonregisteredUser));
+    }
+
+    @Override
+    public ResponseEntity<?> getUserPHoto(String id) {
+        String url = "http://PHOTOSTORAGE-SERVICE/photo";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("id", id).queryParam("photoOf",
+                "user");
+        try {
+            ResponseEntity<Photo> entity = restTemplate.getForEntity(builder.toUriString(), Photo.class);
+
+            return entity;
+        } catch (HttpClientErrorException e) {
+
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                // Handle the 404 Not Found error
+                ResponseEntity<String> response = new ResponseEntity<>("Photo Not Found in userservice",
+                        HttpStatus.NOT_FOUND);
+                return response;
+            }
+
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            // Handle non-HTTP exceptions
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }

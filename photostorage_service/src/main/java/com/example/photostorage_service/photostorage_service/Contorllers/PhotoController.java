@@ -10,6 +10,8 @@ import com.example.photostorage_service.photostorage_service.Services.PhotoServi
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,8 +98,16 @@ public class PhotoController {
     }
 
     @GetMapping()
-    public Photo getMethodName(@RequestParam(name = "id") String param) {
-        return photoService.PhotogetPhotoWithId(param);
+    public ResponseEntity<?> getPhotoWithId(@RequestParam(name = "id") String id,
+            @RequestParam(name = "photoOf", defaultValue = "default") String photoOf) {
+        try {
+            // System.out.println(id);
+            Photo p = photoService.getPhotoById(id, photoOf);
+            return ResponseEntity.ok().body(p);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
 }

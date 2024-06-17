@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.auth_service.Services.SecurityUserService;
-import com.example.auth_service.Utils.JwtUtils;
 
 @Configuration
 public class AppConfig {
@@ -25,23 +24,18 @@ public class AppConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    JwtUtils jwtUtils() {
-        return new JwtUtils();
-    }
-
-    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/auth/register", "auth/validate", "/auth/getToken")
+                .requestMatchers("/auth/register", "/auth/validate", "/auth/getToken")
                 .permitAll()
                 .anyRequest().authenticated())
                 .csrf(c -> c.disable());
         return http.build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

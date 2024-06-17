@@ -22,7 +22,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String middleName;
-    private String password;
+    // private String password;
     private String email;
     private String phone;
 
@@ -48,9 +48,9 @@ public class User {
         return middleName;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    // public String getPassword() {
+    // return password;
+    // }
 
     public String getEmail() {
         return email;
@@ -80,9 +80,9 @@ public class User {
         this.middleName = middleName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    // public void setPassword(String password) {
+    // this.password = password;
+    // }
 
     public void setEmail(String email) {
         this.email = email;

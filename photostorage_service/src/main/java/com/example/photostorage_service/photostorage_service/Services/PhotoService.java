@@ -18,6 +18,6 @@ public interface PhotoService {
 
     public byte[] getPhoto(String filename);
 
-    public Photo PhotogetPhotoWithId(String id);
+    public Photo getPhotoById(String id, String photOf);
 
 }

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "menu")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Menu {
     @Id
     @UuidGenerator

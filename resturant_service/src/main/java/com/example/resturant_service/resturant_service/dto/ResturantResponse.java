@@ -11,6 +11,7 @@ public record ResturantResponse(
         Address address,
         Location location,
         String email,
+        String menuId,
         Menu menu) {
 
     public ResturantResponse {

@@ -1,10 +1,15 @@
 package com.example.apigateway.Filter;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
 
 import com.example.apigateway.Utils.JwtUtil;
 
@@ -16,7 +21,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     // @Autowired
     // RestTemplate restTemplate;
-
     @Autowired
     JwtUtil jwtUtil;
 
@@ -33,10 +37,23 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
         return ((exchange, chain) -> {
             if (routeValidator.isSecured.test(exchange.getRequest())) {
-                if (!(exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)))
-                    throw new RuntimeException("Missing Authorization Header");
 
-                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                if (!(exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))) {
+                    ServerHttpResponse response = exchange.getResponse();
+                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return response.setComplete();
+                }
+
+                String authHeader;
+                List<String> list = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
+
+                if (list == null) {
+                    ServerHttpResponse response = exchange.getResponse();
+                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return response.setComplete();
+                }
+
+                authHeader = list.get(0);
 
                 if (authHeader != null && authHeader.startsWith("Bearer "))
                     authHeader = authHeader.substring(7);

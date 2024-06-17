@@ -1,14 +1,20 @@
 package com.example.resturant_service.resturant_service.Models;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +27,7 @@ public class Resturant {
     private String id;
 
     @Column(name = "name", nullable = false)
+    @JsonProperty("name")
     private String name;
 
     @Embedded
@@ -33,17 +40,25 @@ public class Resturant {
     private Location location;
 
     @Column(name = "email")
+    @JsonProperty("email")
     private String email;
 
     @CreationTimestamp
     @Column(updatable = false, name = "createdAt")
+    @JsonProperty("createdAt")
     private LocalDateTime cratedDateTime;
 
     @Column(name = "menu_Id")
+    @JsonProperty("menuId")
     String menuId;
 
+    @OneToMany(mappedBy = "resturant")
+    @JsonProperty("tables")
+    @JsonManagedReference
+    private Set<Tables> tables = new HashSet<>();
+
     public Resturant(String name, Address address, String phone, Location location, String email,
-            LocalDateTime cratedDateTime, String menuId) {
+            LocalDateTime cratedDateTime, String menuId, Set<Tables> tables) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -51,6 +66,7 @@ public class Resturant {
         this.email = email;
         this.cratedDateTime = cratedDateTime;
         this.menuId = menuId;
+        this.tables = tables;
     }
 
     public Resturant() {
@@ -58,6 +74,10 @@ public class Resturant {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -114,6 +134,14 @@ public class Resturant {
 
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+    }
+
+    public Set<Tables> getTables() {
+        return tables;
+    }
+
+    public void setTables(Set<Tables> tables) {
+        this.tables = tables;
     }
 
 }

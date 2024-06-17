@@ -11,6 +11,7 @@ import com.example.menu_service.menu_service.Repo.MenuItemRepo;
 import com.example.menu_service.menu_service.Services.MenuItemService;
 import com.example.menu_service.menu_service.dto.MenuItemRequest;
 import com.example.menu_service.menu_service.dto.MenuItemResponse;
+import com.example.menu_service.menu_service.dto.MenuResponse;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
@@ -23,8 +24,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         m.setName(request.name());
         m.setDescription(request.description());
         m.setGeneral(false);
-        // m.photoLocation = TODO to be implemted by calling the photostorage service;
-        m.setPhotoLocation("No location  till not ");
+        m.setPhotoLocation(request.photoLocation());
+        m.setVegetarian(request.isVegetarian());
+        m.setPrice(request.price());
+        m.setAvailable(request.available());
+        m.setCategory(request.category());
+        m.setIngredients(request.ingredients());
         return m;
     }
 
@@ -35,8 +40,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     private MenuItemResponse itemToitemres(MenuItem item) {
-        return new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.isGeneral(),
-                item.getPhotoLocation());
+        return new MenuItemResponse(item.getId(), item.getName(), item.getDescription(), item.getPhotoLocation(),
+                item.isVegetarian(), item.getPrice(), item.getAvailable(), item.getCategory(), item.getIngredients());
     }
 
     @Override
@@ -56,6 +61,13 @@ public class MenuItemServiceImpl implements MenuItemService {
             response.add(saveItem(m));
         }
         return response;
+    }
+
+    @Override
+    public Double getPrice(String id) {
+        return menuItemRepo.findById(id)
+                .orElseThrow(() -> new AssertionError())
+                .getPrice();
     }
 
 }

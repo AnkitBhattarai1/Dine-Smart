@@ -2,6 +2,7 @@ package com.example.user_service.Services;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.user_service.dto.NonRegisteredRequestUser;
@@ -23,5 +24,7 @@ public interface UserService {
     public ResponseUser getUserById(String Id);
 
     public ResponseUser updateUser(UpdatingUserRequest user, String id);
+
+    public ResponseEntity<?> getUserPHoto(String id);
 
 }

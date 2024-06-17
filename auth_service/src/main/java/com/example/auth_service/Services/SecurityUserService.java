@@ -16,7 +16,6 @@ import com.example.auth_service.Models.User;
 import com.example.auth_service.Repo.UserRepo;
 import com.example.auth_service.Security.SecurityUser;
 import com.example.auth_service.Utils.JwtUtils;
-import com.netflix.discovery.converters.Auto;
 
 @Service
 public class SecurityUserService implements UserDetailsService {
@@ -34,6 +33,7 @@ public class SecurityUserService implements UserDetailsService {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    // loads the user for authentication...
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var optionalUser = userRepo.findByEmail(email);
@@ -41,21 +41,24 @@ public class SecurityUserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Email not found" + email));
     }
 
+    // save the user in the database...
     public String saveUser(User user) {
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        return "user addded to the sytem";
+        return "User Added to the System";
 
     }
 
+    // Generate the token if the user is authenticated and deliver it ...
     public String generateToken(Auth auth) {
         Authentication a = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(auth.email(),
                         auth.password()));
+
         if (a.isAuthenticated()) {
             return j.generateToken(auth.email());
         } else {
-            throw new RuntimeException("invalid credentials");
+            throw new RuntimeException("Invalid Credentials");
         }
     }
 

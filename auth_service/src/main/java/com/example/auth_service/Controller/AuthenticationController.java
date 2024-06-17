@@ -22,7 +22,6 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String addNewUser(@RequestBody User user) {
-
         return securityUserService.saveUser(user);
     }
 

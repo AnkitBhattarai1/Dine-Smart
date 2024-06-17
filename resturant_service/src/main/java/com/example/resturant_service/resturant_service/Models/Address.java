@@ -8,4 +8,5 @@ public class Address {
     String district;
     String city;
     String detailedPlace;
+
 }
