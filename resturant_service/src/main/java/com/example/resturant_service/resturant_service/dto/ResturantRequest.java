@@ -11,9 +11,7 @@ public record ResturantRequest(
         Location location,
         String email,
         String phone,
-        LocalDateTime createdAt
-// String menuId
-) {
+        LocalDateTime createdAt) {
 
     public ResturantRequest {
 

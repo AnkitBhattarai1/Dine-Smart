@@ -1,5 +1,6 @@
 package com.example.resturant_service.resturant_service.ServicesImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class ResturantServiceImpl implements ResturantService {
         r.setAddress(request.address());
         r.setEmail(request.email());
         r.setPhone(request.phone());
-        r.setCratedDateTime(request.createdAt());
+        r.setCratedDateTime(LocalDateTime.now());
         r.setLocation(request.location());
         // r.setMenuId(createNewMenu());
         r.setTables(null);

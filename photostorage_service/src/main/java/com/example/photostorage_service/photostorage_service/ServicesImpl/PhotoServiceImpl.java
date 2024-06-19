@@ -11,7 +11,7 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.photostorage_service.photostorage_service.Constants.Constants;
 import com.example.photostorage_service.photostorage_service.Models.Photo;
@@ -28,6 +28,9 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Autowired
     Constants constant;
+
+    private static final String API_GATEWAY_HOST = "192.168.43.150";
+    private static final int API_GATEWAY_PORT = 9090;
 
     private enum PhotoType {
         MENUITEMS(Constants.getMenuItemsPhotosLocation(), "MENU_ITEMS_PHOTOS_"),
@@ -106,10 +109,19 @@ public class PhotoServiceImpl implements PhotoService {
             Files.copy(image.getInputStream(),
                     storageLocation.resolve(savedInstance.getId() + fileExtension.apply(image.getOriginalFilename())));
 
-            String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+            // String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+            // .path("/photo/" + photoType.name +
+            // savedInstance.getId() + fileExtension.apply(image.getOriginalFilename()))
+            // .toUriString();
+
+            String uri = UriComponentsBuilder.newInstance()
+                    .scheme("http")
+                    .host(API_GATEWAY_HOST)
+                    .port(API_GATEWAY_PORT)
                     .path("/photo/" + photoType.name +
                             savedInstance.getId() + fileExtension.apply(image.getOriginalFilename()))
                     .toUriString();
+
             p.setLocation(uri);
             photoRepo.save(p);
 

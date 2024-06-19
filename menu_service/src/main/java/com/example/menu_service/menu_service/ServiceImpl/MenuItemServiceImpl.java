@@ -11,7 +11,6 @@ import com.example.menu_service.menu_service.Repo.MenuItemRepo;
 import com.example.menu_service.menu_service.Services.MenuItemService;
 import com.example.menu_service.menu_service.dto.MenuItemRequest;
 import com.example.menu_service.menu_service.dto.MenuItemResponse;
-import com.example.menu_service.menu_service.dto.MenuResponse;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
@@ -68,6 +67,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemRepo.findById(id)
                 .orElseThrow(() -> new AssertionError())
                 .getPrice();
+    }
+
+    @Override
+    public void deleteItem(String id) {
+        menuItemRepo.delete(menuItemRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(" the menuItem doesnot exist")));
     }
 
 }

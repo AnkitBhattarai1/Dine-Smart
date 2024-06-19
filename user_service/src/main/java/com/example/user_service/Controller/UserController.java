@@ -32,13 +32,10 @@ public class UserController {
      * /user/email gets the user object of the given email address
      */
 
-    private final RestTemplate restTemplate;
-
     private final UserService userService;
 
-    public UserController(UserService userService, RestTemplate restTemplate) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/all")
@@ -83,14 +80,15 @@ public class UserController {
         return userService.savenonRegisteredUser(user);
     }
 
-    @GetMapping("/path")
-    public String getMethodName(@RequestParam(name = "param") String param) {
-        String url = "http://PHOTOSTORAGE_SERVICE/photo/path";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("param", param);
-        String a = restTemplate.getForObject(builder.toUriString(), String.class, param);
-        return a;
-    }
+    // @GetMapping("/path")
+    // public String getUserPhoto(@RequestParam(name = "param") String param) {
+    // String url = "http://PHOTOSTORAGE_SERVICE/photo/path";
+    // UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+    // .queryParam("param", param);
+    // String a = restTemplate.getForObject(builder.toUriString(), String.class,
+    // param);
+    // return a;
+    // }
 
     @GetMapping("/photo/{id}")
     public ResponseEntity<?> getPhoto(@PathVariable String id) {

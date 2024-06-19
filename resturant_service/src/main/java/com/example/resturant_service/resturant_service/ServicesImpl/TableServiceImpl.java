@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.resturant_service.resturant_service.Exceptions.ResourceNotFoundException;
 import com.example.resturant_service.resturant_service.Models.Resturant;
@@ -26,6 +27,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 @Service
 public class TableServiceImpl implements TableService {
 
+    private static final String API_GATEWAY_HOST = "192.168.43.150";
+    private static final int API_GATEWAY_PORT = 9090;
     private final TableRepo tableRepo;
     private final ResturantService resutrantService;
     private AtomicInteger i = new AtomicInteger(0);
@@ -45,8 +48,18 @@ public class TableServiceImpl implements TableService {
         table.setResturant(resturant);
         table.setCapacity(number);
         table.setTableNo(newTableNo);
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/order?resturantId=" + resturantId + "&tableId=" + table.getTableNo()).build().toUriString();
+        // String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+        // .path("/order?resturantId=" + resturantId + "&tableId=" +
+        // table.getTableNo()).build().toUriString();
+        String url = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host(API_GATEWAY_HOST)
+                .port(API_GATEWAY_PORT)
+                .path("/order")
+                .queryParam("resturantId", resturantId)
+                .queryParam("tableId", newTableNo)
+                .build()
+                .toUriString();
         table.setQr(url);
         return tableRepo.save(table);
     }

@@ -74,6 +74,7 @@ public class MenuServiceImpl implements MenuService {
 
         Menu m = menuRepo.findByResturantId(resturantId)
                 .orElseThrow(() -> new IllegalArgumentException("The resturant does not exist"));
+
         Menu request = menReqToMenu(req);
         m.setMenuItems(request.getMenuItems());
         return menuToMenuRes(menuRepo.save(m));

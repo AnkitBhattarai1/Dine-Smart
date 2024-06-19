@@ -3,6 +3,7 @@ package com.example.resturant_service.resturant_service.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.resturant_service.resturant_service.Models.Resturant;
 import com.example.resturant_service.resturant_service.Services.ResturantService;
 import com.example.resturant_service.resturant_service.dto.ResturantRequest;
 

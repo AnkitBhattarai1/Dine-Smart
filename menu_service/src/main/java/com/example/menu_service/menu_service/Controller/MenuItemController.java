@@ -4,8 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.menu_service.menu_service.Services.MenuItemService;
 
-import java.net.http.HttpResponse.ResponseInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

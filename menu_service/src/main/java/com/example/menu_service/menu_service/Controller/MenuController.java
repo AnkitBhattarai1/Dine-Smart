@@ -50,10 +50,10 @@ public class MenuController {
         return ResponseEntity.ok().body(entity.id());
     }
 
-    @PostMapping()
-    public MenuResponse saveMenu(@RequestBody MenuRequest request) {
-        return menuService.saveMenu(request);
-    }
+    // @PostMapping()
+    // public MenuResponse saveMenu(@RequestBody MenuRequest request) {
+    // return menuService.saveMenu(request);
+    // }
 
     @PutMapping("updateMenu/{id}")
     public String putMethodName(@PathVariable String menuId, @RequestBody MenuRequest menu) {

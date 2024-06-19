@@ -1,7 +1,8 @@
 package com.example.menu_service.menu_service.dto;
 
 public record MenuItemRequest(
-        String name, String description,
+        String name,
+        String description,
         String photoLocation,
         double price,
         boolean isGeneral,

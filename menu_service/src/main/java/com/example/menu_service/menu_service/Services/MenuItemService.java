@@ -19,4 +19,6 @@ public interface MenuItemService {
 
     public Double getPrice(String id);
 
+    public void deleteItem(String id);
+
 }

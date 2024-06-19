@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderItemRequest requestItem : orderItemRequests) {
             OrderItem saveOrderItem = orderItemService.saveOrderItem(requestItem, savedInstance);
             orderItems.add(saveOrderItem);
-            price += saveOrderItem.getPrice();
+            price += saveOrderItem.getPrice() * saveOrderItem.getQuantity();
         }
 
         savedInstance.setCustomerId(userId);
