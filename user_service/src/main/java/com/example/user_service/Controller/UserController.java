@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.user_service.Services.UserService;
 import com.example.user_service.dto.NonRegisteredRequestUser;

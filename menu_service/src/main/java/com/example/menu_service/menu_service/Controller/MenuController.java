@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.menu_service.menu_service.Model.Menu;
-import com.example.menu_service.menu_service.Services.MenuItemService;
 import com.example.menu_service.menu_service.Services.MenuService;
 import com.example.menu_service.menu_service.dto.MenuItemRequest;
 import com.example.menu_service.menu_service.dto.MenuRequest;
@@ -22,11 +20,9 @@ import com.example.menu_service.menu_service.dto.MenuResponse;
 public class MenuController {
 
     private final MenuService menuService;
-    private final MenuItemService menuItemService;
 
-    public MenuController(MenuService menuService, MenuItemService menuItemService) {
+    public MenuController(MenuService menuService) {
         this.menuService = menuService;
-        this.menuItemService = menuItemService;
     }
 
     @GetMapping("getMenuOfResturant")

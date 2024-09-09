@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.resturant_service.resturant_service.Exceptions.ResourceNotFoundException;
@@ -31,7 +29,6 @@ public class TableServiceImpl implements TableService {
     private static final int API_GATEWAY_PORT = 9090;
     private final TableRepo tableRepo;
     private final ResturantService resutrantService;
-    private AtomicInteger i = new AtomicInteger(0);
 
     public TableServiceImpl(TableRepo tableRepo, ResturantService resturantService) {
         this.resutrantService = resturantService;

@@ -78,7 +78,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ResponseUser> getAllUsers() {
-
         return userRepo.findAll().stream().map(
                 (user) -> userToUserRes.apply(user)).toList();
     }
@@ -109,6 +108,7 @@ public class UserServiceImpl implements UserService {
 
         if (response.getStatusCode() != HttpStatus.OK)
             throw new RuntimeException("Could not register the user");
+
         return userToUserRes.apply(u);
     }
 
@@ -145,7 +145,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseUser savenonRegisteredUser(NonRegisteredRequestUser user) {
-
         Optional<User> u = userRepo.findByPhone(user.phone());
 
         if (u.isPresent()) {
@@ -153,7 +152,6 @@ public class UserServiceImpl implements UserService {
             // application.....
             return userToUserRes.apply(u.get());
         }
-
         User nonregisteredUser = new User();
         nonregisteredUser.setEmail(user.email());
         nonregisteredUser.setPhone(user.phone());
@@ -185,7 +183,6 @@ public class UserServiceImpl implements UserService {
             // Handle non-HTTP exceptions
             return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 }
